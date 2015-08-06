@@ -18,7 +18,7 @@
 	<!-- ionic/angularjs js -->
 	<script src="lib/ionic/js/ionic.bundle.js" ></script >
 
-	<!-- cordova script (this will be a 404 during development) -->
+	<script src="lib/ngCordova/dist/ng-cordova.js"></script>
 	<script src="cordova.js" ></script >
 
 	<!-- your app's js -->
@@ -37,6 +37,12 @@
 		</h1 >
 	</ion-header-bar >
 	<ion-content >
+
+		<ion-refresher
+				pulling-text="Refresh..."
+				on-refresh="doRefresh()" >
+		</ion-refresher >
+
 		<ion-list >
 			<ion-item ng-repeat="cafe in yelp.results"
 			          class="item-thumbnail-left" >
@@ -50,7 +56,7 @@
 				</p >
 				<p >
 					<i class="ion ion-ios-location" ></i >
-					{{cafe.location.display_address }}
+					{{cafe.location.display_address | join:", "}}
 				</p >
 				<p >
 					<span >
@@ -60,8 +66,24 @@
 						<i class="ion ion-person" ></i >
 						{{cafe.review_count}}</span >
 				</p >
+
+				<ion-option-button class="button-positive"
+						ng-click="getDirections(cafe)">
+					<i class="ion ion-map"></i>&nbsp;Directions
+				</ion-option-button>
+
 			</ion-item >
 		</ion-list >
+
+		<ion-infinite-scroll
+				ng-if="yelp.hasMore"
+				immediate-check="false"
+				on-infinite="loadMore()" >
+
+		</ion-infinite-scroll>
+
+
+
 	</ion-content >
 </ion-pane >
 </body >
